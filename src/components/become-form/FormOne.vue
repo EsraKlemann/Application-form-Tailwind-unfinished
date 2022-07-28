@@ -1,0 +1,208 @@
+<template>
+  <FirstModal v-if="modalVisible" title="Woon/werkadres" @close="hideModal">
+    <template #default>
+      <p class="font-medium">Als een adres bedoeld is om te wonen of werken, heeft het een verblijfsfunctie. Dan heb je
+        recht op
+        vermindering van energiebelasting.
+        Een adres zonder verblijfsfunctie is bijvoorbeeld een garagebox of volkstuin. </p>
+    </template>
+    <template #actions>
+      <button @click="hideModal">Okay</button>
+    </template>
+  </FirstModal>
+
+  <div class="mt-10 sm:mt-0">
+    <!-- GRID -->
+    <div class="md:grid md:grid-cols-3 md:gap-6">
+
+      <div class="mt-5 md:mt-0 md:col-span-3">
+        <form @submit.prevent="submitForm">
+          <!-- BACKGROUND AND SHADOW BOX -->
+          <div class="overflow-hidden sm:rounded-md">
+            <!-- WHITE BOX -->
+            <div class="px-4 py-5 bg-white sm:p-4 rounded-md">
+              <!-- GRID -->
+              <div class="grid grid-cols-6 gap-5 gap-y-4">
+                <!-- POSTAL CODE -->
+                <div :class="{ invalid: !postalCode.isValid }" class="col-span-6 sm:col-span-6">
+                  <label for="postal" class="block p-1 text-lg font-semibold text-gray-800">Postcode</label>
+                  <input type="text" v-model.trim="postalCode.val" @blur="clearValidity('postalCode')" name="postal"
+                    id="postal" autocomplete="postal-code" placeholder="1234AB"
+                    :class="{ invalid: !postalCode.isValid }"
+                    class=" placeholder:text-slate-200 block w-full rounded-md py-2 pl-2 pr-3 shadow-md focus:outline-none focus:ring-amber-400 invalid:ring-red-400/60 invalid:bg-red-400/60 invalid:border-red-400/60 focus:ring-2 sm:text-lg" />
+                  <p v-if="!postalCode.isValid" class="text-red-700 block">De ingevulde postcode is niet juist</p>
+                </div>
+
+                <!-- NUMBER -->
+                <div :class="{ invalid: !houseNumber.isValid }" class="col-span-6 sm:col-span-3">
+                  <label for="housenr" class="block p-1 text-lg font-semibold text-gray-700">Huisnummer</label>
+                  <input type="text" v-model.number="houseNumber.val" @blur="clearValidity('houseNumber')"
+                    name="housenr" id="housenr" placeholder="123"
+                    class=" placeholder:text-slate-200 block bg-white w-full rounded-md py-2 pl-2 pr-3 shadow-md focus:outline-none focus:border-orange-400 focus:ring-amber-400 focus:ring-2 sm:text-lg" />
+                  <p v-if="!houseNumber.isValid" class="text-red-700 block">Dit is geen juist huisnummer</p>
+                </div>
+
+                <!-- ADDITION -->
+                <div class="col-span-6 sm:col-span-3">
+                  <label for="addition"
+                    class="sm:block p-1 text-lg font-semibold text-gray-700 invalid:text-red-600 ">Toevoeging</label>
+                  <input type="text" v-model.trim="addition.val" name="addition" id="addition" placeholder="A"
+                    class=" placeholder:text-slate-200 block bg-white w-full rounded-md py-2 pl-2 pr-3 shadow-md focus:outline-none focus:border-orange-400 focus:ring-amber-400  focus:ring-2 sm:text-lg" />
+                </div>
+
+                <div class="col-span-6">
+                  <!-- TOGGLE -->
+                  <div class="flex items-center justify-center w-full mb-4">
+                    <label for="toggleVerblijfsfunctie" class="flex items-center cursor-pointer">
+                      <!-- toggle -->
+                      <div class="relative">
+                        <!-- input -->
+                        <input type="checkbox" v-model="verblijfsfunctie" name="verblijfsfunctie"
+                          id="toggleVerblijfsfunctie" class="sr-only checked">
+                        <!-- line -->
+                        <div class="line block bg-sky-900 w-14 h-8 rounded-full"></div>
+                        <!-- dot -->
+                        <div class="dot absolute right-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                      </div>
+                      <!-- label -->
+                      <div class="ml-2 text-slate-400 font-medium sm:text-base">
+                        Op dit adres kun je wonen of werken
+                      </div>
+
+                      <div>
+                        <img :src="question" @click="showModal" @mouseenter="showModal" @mouseleave="hideModal"
+                          class="w-5 ml-4 mr-3" />
+                      </div>
+
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- GREY BOX AROUND BUTTON -->
+            <div class="p-4 lg:pb-32 bg-gray-50">
+              <p v-if="!formIsValid" class="p-2 text-red-700">Vul eerst de gegevens juist in</p>
+              <NextButton />
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</template>
+
+<script>
+// src\assets\Dezelfde - Energie.svg
+import question from '@/assets/question.jpg'
+import dezelfde from '@/assets/Dezelfde-Energie.svg'
+
+import NextButton from '../ui/NextButton.vue'
+import FirstModal from '@/components/modal/FirstModal.vue'
+
+// import BaseDialog from '../modal/BaseDialog.vue'
+
+
+export default {
+  components: { NextButton, FirstModal },
+  emits: ['close'],
+  data() {
+    return {
+      question: question,
+      dezelfde: dezelfde,
+      modalVisible: false,
+
+      postalCode: {
+        val: '',
+        isValid: true,
+      },
+      houseNumber: {
+        val: null,
+        isValid: true,
+      },
+      addition: {
+        val: '',
+        isValid: true,
+      },
+      verblijfsfunctie: {
+        val: true,
+        isValid: true,
+      },
+
+      formIsValid: true,
+      error: null
+    };
+  },
+  methods: {
+    showModal() {
+      this.modalVisible = true;
+    },
+    hideModal() {
+      this.modalVisible = false;
+    },
+    clearValidity(input) {
+      this[input].isValid = true;
+    },
+    validateForm() {
+      this.formIsValid = true;
+      if (this.postalCode.val === '' || this.postalCode.val.length > 6) {
+        this.postalCode.isValid = false;
+        this.formIsValid = false;
+      }
+      if (!this.houseNumber.val || this.houseNumber.val < 0) {
+        this.houseNumber.isValid = false;
+        this.formIsValid = false;
+      }
+    },
+    submitForm() {
+      this.validateForm();
+      if (!this.formIsValid) {
+        return;
+      }
+
+      const formData = {
+        postal: this.postalCode.val,
+        number: this.houseNumber.val,
+        addition: this.addition.val,
+        verblijfsfunc: this.verblijfsfunctie.val
+
+      }
+
+      console.log(formData);
+
+      fetch('https://mega-become-test-default-rtdb.europe-west1.firebasedatabase.app/step-one.json', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(
+          formData
+        ),
+      })
+        .then((response) => {
+          if (response.ok) {
+            // ga naar volgende form stap. router beweeg naar invisible item? 
+          } else {
+            throw new Error('Could not save data!');
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          this.error = error.message;
+        });
+    }
+  }
+}
+</script>
+
+<style>
+input:checked~.dot {
+  transform: translateX(-100%);
+  background-color: #eaeaea;
+}
+
+input:checked~.line {
+  background-color: #c0c0c0;
+}
+</style>
