@@ -1,6 +1,6 @@
 <template>
-  <div class="flex">
-    <CardEnergyType @click="electraSelection" title="Stroom" :class="{ 'bg-sky-800': selected === 'Stroom' }"></CardEnergyType>
+  <div class="bg-gray-100 flex row-auto">
+    <CardEnergyType @click="electraSelection" title="Stroom" :class="{ 'bg-sky-800': selected === 'Stroom' }" ></CardEnergyType>
     <CardEnergyType @click="electraGasSelection" :class="{ 'bg-sky-800': selected === 'Stroom & Gas' }" title="Stroom & Gas"></CardEnergyType>
   </div>
 </template>
@@ -23,7 +23,6 @@ export default {
     electraGasSelection() {
       this.selected = 'Stroom & Gas'
     },
-
   }
 }
 

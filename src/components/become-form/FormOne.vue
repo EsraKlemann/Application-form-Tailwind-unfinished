@@ -94,15 +94,11 @@
 </template>
 
 <script>
-// src\assets\Dezelfde - Energie.svg
 import question from '@/assets/question.jpg'
 import dezelfde from '@/assets/Dezelfde-Energie.svg'
 
 import NextButton from '../ui/NextButton.vue'
 import FirstModal from '@/components/modal/FirstModal.vue'
-
-// import BaseDialog from '../modal/BaseDialog.vue'
-
 
 export default {
   components: { NextButton, FirstModal },
