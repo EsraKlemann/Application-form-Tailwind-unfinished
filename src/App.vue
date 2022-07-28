@@ -23,15 +23,31 @@ export default {
   font-family: SpaceGrotesk;
   background-image: url("./assets/background/background-windturbine-gradient.jpg");
   background-repeat: no-repeat;
-  background-size: 49%;
+  background-size: 70rem;
   background-position: top right;
 }
+@media (max-width: 2000px) {
+  #app { 
+    background-size: 53rem;
+  }
+}
 
+/* @media (max-width: 15px) {
+  #app { 
+    background-size: 60rem;
+  }
+} */
+
+@media (max-width: 1440px) {
+  #app { 
+    background-size: 100%;
+  }
+}
 @media (max-width: 976px) {
   #app {
     background-image: url("./assets/background/background-windturbine-horizontal-gradient.jpg");
     background-repeat: no-repeat;
-    background-size: 58rem;
+    background-size: 61rem;
   }
 }
 </style>
