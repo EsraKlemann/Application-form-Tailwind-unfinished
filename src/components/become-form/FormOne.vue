@@ -1,9 +1,8 @@
 <template>
   <FirstModal v-if="modalVisible" title="Woon/werkadres" @close="hideModal">
     <template #default>
-      <p class="font-medium">Als een adres bedoeld is om te wonen of werken, heeft het een verblijfsfunctie. Dan heb je
-        recht op
-        vermindering van energiebelasting.
+      <p class="font-medium">Als een adres bedoeld is om te wonen of werken, heeft het een verblijfsfunctie  
+        en betaal je een lagere energiebelasting. 
         Een adres zonder verblijfsfunctie is bijvoorbeeld een garagebox of volkstuin. </p>
     </template>
     <template #actions>
@@ -24,8 +23,8 @@
               <!-- GRID -->
               <div class="grid grid-cols-6 gap-5 gap-y-4">
                 <!-- POSTAL CODE -->
-                <div :class="{ invalid: !postalCode.isValid }" class="col-span-6 sm:col-span-6">
-                  <label for="postal" class="block p-1 text-lg font-semibold text-gray-800">Postcode</label>
+                <div :class="{ 'invalid': !postalCode.isValid }" class="col-span-6 sm:col-span-6">
+                  <label for="postal" class="block p-1 text-lg font-semibold text-gray-800 invalid:text-red-600">Postcode</label>
                   <input type="text" v-model.trim="postalCode.val" @blur="clearValidity('postalCode')" name="postal"
                     id="postal" autocomplete="postal-code" placeholder="1234AB"
                     :class="{ invalid: !postalCode.isValid }"
@@ -36,14 +35,22 @@
                 <!-- NUMBER -->
                 <div :class="{ invalid: !houseNumber.isValid }" class="col-span-6 sm:col-span-3">
                   <label for="housenr" class="block p-1 text-lg font-semibold text-gray-700">Huisnummer</label>
-                  <input type="text" v-model.number="houseNumber.val" @blur="clearValidity('houseNumber')"
+                  <input type="number" v-model.number="houseNumber.val" @blur="clearValidity('houseNumber')"
                     name="housenr" id="housenr" placeholder="123"
                     class=" placeholder:text-slate-200 block bg-white w-full rounded-md py-2 pl-2 pr-3 shadow-md focus:outline-none focus:border-orange-400 focus:ring-amber-400 focus:ring-2 sm:text-lg" />
                   <p v-if="!houseNumber.isValid" class="text-red-700 block">Dit is geen juist huisnummer</p>
                 </div>
 
                 <!-- ADDITION -->
+                
                 <div class="col-span-6 sm:col-span-3">
+                  <!-- <button type="button" class="bg-white ..." disabled>
+                    <svg class="animate-spin h-5 w-5 mr-3 ..." viewBox="0 0 24 24">
+                      ... 
+                     </svg>
+                  </button> -->
+
+
                   <label for="addition"
                     class="sm:block p-1 text-lg font-semibold text-gray-700 invalid:text-red-600 ">Toevoeging</label>
                   <input type="text" v-model.trim="addition.val" name="addition" id="addition" placeholder="A"
@@ -53,16 +60,17 @@
                 <div class="col-span-6">
                   <!-- TOGGLE -->
                   <div class="flex items-center justify-center w-full mb-4">
-                    <label for="toggleVerblijfsfunctie" class="flex items-center cursor-pointer">
+                    <!-- <p>{{verblijfsfunctie}}</p> -->
+                    <label for="verblijfsfunctie" class="flex items-center cursor-pointer">
                       <!-- toggle -->
                       <div class="relative">
                         <!-- input -->
                         <input type="checkbox" v-model="verblijfsfunctie" name="verblijfsfunctie"
-                          id="toggleVerblijfsfunctie" class="sr-only checked">
-                        <!-- line -->
-                        <div class="line block bg-sky-900 w-14 h-8 rounded-full"></div>
-                        <!-- dot -->
-                        <div class="dot absolute right-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                          id="verblijfsfunctie" class="sr-only checked" @click="toggleVerblijfsfunctie">
+                          <!-- line -->
+                          <div class="line block bg-slate-200 w-14 h-8 rounded-full"></div>
+                          <!-- dot -->
+                          <div class="dot absolute right-1 top-1 bg-slate-50 w-6 h-6 rounded-full transition"></div>
                       </div>
                       <!-- label -->
                       <div class="ml-2 text-slate-400 font-medium sm:text-base">
@@ -121,16 +129,16 @@ export default {
         val: '',
         isValid: true,
       },
-      verblijfsfunctie: {
-        val: true,
-        isValid: true,
-      },
+      verblijfsfunctie: true,
 
       formIsValid: true,
       error: null
     };
   },
   methods: {
+    toggleVerblijfsfunctie(){
+      this.verblijfsfunctie = !this.verblijfsfunctie
+    },
     showModal() {
       this.modalVisible = true;
     },
@@ -142,7 +150,8 @@ export default {
     },
     validateForm() {
       this.formIsValid = true;
-      if (this.postalCode.val === '' || this.postalCode.val.length > 6) {
+      
+      if (this.postalCode.val === '' || this.postalCode.val.length != 6 ) {
         this.postalCode.isValid = false;
         this.formIsValid = false;
       }
@@ -158,10 +167,10 @@ export default {
       }
 
       const formData = {
-        postal: this.postalCode.val,
+        postal: this.postalCode.val.replace(/\s+/g, '').toUpperCase(),
         number: this.houseNumber.val,
         addition: this.addition.val,
-        verblijfsfunc: this.verblijfsfunctie.val
+        verblijfsfunctie: this.verblijfsfunctie
 
       }
 
@@ -188,17 +197,20 @@ export default {
           this.error = error.message;
         });
     }
-  }
+  },
+  watch: {
+
+  },
 }
 </script>
 
 <style>
 input:checked~.dot {
   transform: translateX(-100%);
-  background-color: #eaeaea;
+  background-color: #ffffff;
 }
 
 input:checked~.line {
-  background-color: #c0c0c0;
+  background-color:  #0c4a6e;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div  class="max-w-md rounded overflow-hidden shadow-lg bg-white">
+  <div  class="max-w-md py-4 rounded overflow-hidden shadow-lg bg-white">
     <img :src="require(`@/assets/energy-icons/${title}.png`)" class="h-40" alt="test">
     <div class="px-6 py-4">
       <div class="font-bold text-xl mb-2">{{title}}</div>
@@ -8,7 +8,7 @@
       
       <span
         class="inline-block bg-gray-100 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
-        >Bekijk prijzen -></span>
+        >Contracten &rarr;</span>
     </div>
   </div>
 </template>
@@ -27,7 +27,7 @@ export default {
     }
   },
   methods: {
-    getContract() {
+    async getContract() {
       const response = await fetch('https://mega-become-test-default-rtdb.europe-west1.firebasedatabase.app/products.json');
 
       const responseData = await response.json();
@@ -41,9 +41,14 @@ export default {
 
       for (const key in responseData) {
         const contract = {
-          
-        }
-
+          code: responseData[key].code,
+          contractType: responseData[key].contract_type,
+          duration: responseData[key].duration,
+          energyType: responseData[key].energy_type,
+          id: responseData[key].id,
+          descriptions: responseData[key].descriptions
+        };
+        contracts.push(contract);
       }
     }
   }
