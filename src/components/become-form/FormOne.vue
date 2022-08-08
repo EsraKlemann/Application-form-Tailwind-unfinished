@@ -20,9 +20,10 @@
           <!-- BACKGROUND AND SHADOW BOX -->
           <div class="overflow-hidden sm:rounded-md">
             <!-- WHITE BOX -->
-            <div class="px-4 py-5 bg-white sm:p-4 rounded-md">
+            <div class="px-4 py-5 bg-white sm:p-4 rounded-t-md">
               <!-- GRID -->
               <div class="grid grid-cols-6 gap-5 gap-y-4">
+
                 <!-- POSTAL CODE -->
                 <div :class="{ invalid: !postalCode.isValid }" class="col-span-6 sm:col-span-6">
                   <label for="postal" class="block p-1 text-lg font-semibold text-gray-800">Postcode</label>
@@ -43,7 +44,9 @@
                 </div>
 
                 <!-- ADDITION -->
+
                 <div class="col-span-6 sm:col-span-3">
+
                   <label for="addition"
                     class="sm:block p-1 text-lg font-semibold text-gray-700 invalid:text-red-600 ">Toevoeging</label>
                   <input type="text" v-model.trim="addition.val" name="addition" id="addition" placeholder="A"
@@ -80,7 +83,7 @@
               </div>
             </div>
             <!-- GREY BOX AROUND BUTTON -->
-            <div class="p-4 lg:pb-32 bg-gray-50">
+            <div class="p-4 lg:pb-5 bg-gray-50">
               <p v-if="!formIsValid" class="p-2 text-red-700">Vul eerst de gegevens juist in</p>
               <NextButton />
             </div>
