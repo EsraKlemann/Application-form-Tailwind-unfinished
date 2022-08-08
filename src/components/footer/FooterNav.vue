@@ -1,5 +1,5 @@
 <template>
-  <footer class="bg-veryDarkBlue">
+  <footer class="bg-slate-800">
     <!-- Flex Container -->
     <div class="container flex flex-col-reverse justify-between px-6 py-10 mx-auto space-y-8 md:flex-row md:space-y-0">
       <!-- Logo and social links container -->
