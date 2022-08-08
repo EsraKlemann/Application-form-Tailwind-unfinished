@@ -86,7 +86,7 @@ export default {
   left: 0;
   width: 24px;
   height: 2px;
-  background: #000;
+  background: rgb(181, 182, 199);
   transform: rotate(0);
   transition: all 0.5s;
 }
