@@ -51,12 +51,17 @@
                       ... 
                      </svg>
                   </button> -->
-
-
-                  <label for="addition"
-                    class="sm:block p-1 text-lg font-semibold text-gray-700 invalid:text-red-600 ">Toevoeging</label>
-                  <input type="text" v-model.trim="addition.val" name="addition" id="addition" placeholder="A"
-                    class=" placeholder:text-slate-200 block bg-white w-full rounded-md py-2 pl-2 pr-3 shadow-md focus:outline-none focus:border-orange-400 focus:ring-amber-400  focus:ring-2 sm:text-lg" />
+                  <div v-if="isLoading">
+                    <BaseSpinner />
+                  </div>
+                  <!-- has to become a dropdown i think -->
+                  <!-- when !isloading and .... values in search are more than 1? -->
+                  <div v-if="!isLoading">
+                    <label for="addition"
+                      class="sm:block p-1 text-lg font-semibold text-gray-700 invalid:text-red-600 ">Toevoeging</label>
+                    <input type="text" v-model.trim="addition.val" name="addition" id="addition" placeholder="A"
+                      class=" placeholder:text-slate-200 block bg-white w-full rounded-md py-2 pl-2 pr-3 shadow-md focus:outline-none focus:border-orange-400 focus:ring-amber-400  focus:ring-2 sm:text-lg" />
+                  </div>
                 </div>
 
                 <div class="col-span-6">
@@ -109,15 +114,17 @@ import dezelfde from '@/assets/Dezelfde-Energie.svg'
 
 import NextButton from '../ui/NextButton.vue'
 import FirstModal from '@/components/modal/FirstModal.vue'
+import BaseSpinner from '../ui/BaseSpinner.vue'
 
 export default {
-  components: { NextButton, FirstModal },
+  components: { NextButton, FirstModal, BaseSpinner },
   emits: ['close'],
   data() {
     return {
       question: question,
       dezelfde: dezelfde,
       modalVisible: false,
+      isLoading: false,
 
       postalCode: {
         val: '',
@@ -137,7 +144,91 @@ export default {
       error: null
     };
   },
+  // computed: {
+  //   compNumberPostal() {
+  //     console.log('Checking number and postal code...');
+  //     if (this.postalCode && this.houseNumber) {
+  //       return this.
+  //     }
+  //   },
+  // },
+  watch: {
+    // maybe these needed, only when i put these in the .val versions started working.
+    // maybe also more logical to use this because we have access to value.isValid...?
+    // postalCode: {
+    //   handler(value) {
+    //     if (value.val.length > 5) {
+    //       console.log('checking postal')
+    //     }
+    //   },
+    //   deep: true
+    // },
+    // houseNumber: {
+    //   handler(value) {
+    //     if (value.val.length > 0) {
+    //       console.log('checking housenr')
+    //     }
+    //   },
+    //   deep: true
+    // },
+    'postalCode.val'(post) {
+      if (post.length > 5) {
+        console.log('postal being checked');
+        // set a value to true > computed with the value from number?
+      }
+    },
+    'houseNumber.val'(number) {
+      if (number > 0) {
+        console.log('housenumber check')
+      }
+    },
+    // postalCode(post) {
+    //   if (post.val.length > 5) {
+    //     console.log('postal and housenr are being checked')
+    //     // this.getAddition;
+    //   }
+    // },
+
+    // houseNumber() {
+    //   if (this.houseNumber && this.postalCode) {
+    //     console.log('housenr and postal are being checked')
+    //     // this.getAddition;
+    //   }
+    // },
+  },
   methods: {
+    async searchRequest() {
+      try {
+        const res = await fetch('https://mega-become-test-default-rtdb.europe-west1.firebasedatabase.app/search.json')
+        const responseData = await res.json();
+
+        if (res.ok) {
+          console.log(responseData)
+        }
+        if (!res.ok) {
+          const error = new Error(responseData.message || 'Failed to fetch!');
+          throw error;
+        }
+        this.availableAdditions = (await res.json())
+        console.log(this.availableAdditions.toString)
+      } catch (error) {
+        console.log('Could not reach the API' + error)
+      }
+    },
+    async getAddition() {
+      // make spinner appear?
+      // send search request
+      this.isLoading = true;
+      try {
+        await this.searchRequest;
+      } catch (error) {
+        this.error = error.message || 'Something went wrong'
+      }
+      this.isLoading = false;
+      // if ok, make spinner disappear
+      // if not ok, red text. staat uw waarde hier niet tussen, neem contact op?
+      // if ok read values and make dropdown appear. 
+    },
     toggleVerblijfsfunctie() {
       this.verblijfsfunctie = !this.verblijfsfunctie
     },
@@ -200,13 +291,12 @@ export default {
         });
     }
   },
-  watch: {
 
-  },
 }
 </script>
 
 <style>
+/* Slider styles */
 input:checked~.dot {
   transform: translateX(-100%);
   background-color: #ffffff;
