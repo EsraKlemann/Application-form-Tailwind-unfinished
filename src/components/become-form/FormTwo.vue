@@ -62,6 +62,7 @@ export default {
           descriptions: responseData[key].descriptions,
         }
         contracts.push(contract);
+        console.log(contracts);
       }
     }
   }
