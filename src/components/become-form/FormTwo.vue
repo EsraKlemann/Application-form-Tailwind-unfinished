@@ -1,6 +1,6 @@
 <template>
   <!-- CONTAINER HEADING AND ENERGY BLOCKS -->
-  <div class="max-w-7xl px-5 mx-auto mt-32 text-center">
+  <div class="max-w-7xl px-1 mx-auto mt-32 text-center">
     <!-- HEADING -->
     <h2 class="text-3xl font-bold text-center">
       Kies uw energie

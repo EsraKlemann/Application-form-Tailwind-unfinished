@@ -6,7 +6,7 @@
     <img :src="require(`@/assets/energy-icons/${title}.png`)" class="w-20 sm:w-40 p-3" alt="image of energy type">
     <!-- TITLE TEXT -->
     <div class="px-6 h-20 text-center">
-      <div class="font-bold sm:text-2xl mb-2 ">{{ title }}</div>
+      <div class="font-bold sm:text-2xl sm:mb-2 align-middle">{{ title }}</div>
     </div>
     <!-- BUTTON TO CONTINUE -->
     <!-- <div class=" pt-4 pb-2">
