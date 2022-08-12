@@ -1,4 +1,13 @@
-# become-vue-tailwind-storybook
+# Application form for energy products
+Created with Vue.js 3 and Tailwind.
+It sends and fetches data to a (private) Firebase realtime DB. 
+
+The project is currently unfinished due to time restrictions. A.O. I would still like to add/improve:
+- correct backgrounds on larger screen sizes.
+- improve details of reactivity steps.
+- continued steps of form.
+- animating the appearance of a next form step.
+
 
 ## Project setup
 ```
@@ -10,15 +19,3 @@ npm install
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
